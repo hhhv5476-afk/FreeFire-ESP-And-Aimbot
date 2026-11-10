@@ -20,17 +20,14 @@ jobs:
         distribution: 'temurin'
         java-version: '11'
 
-    - name: Setup Gradle 7.6
-      uses: gradle/actions/setup-gradle@v3
-      with:
-        gradle-version: '7.6'
-
-    - name: Download missing gradle-wrapper.jar
-      run: curl -L -o gradle/wrapper/gradle-wrapper.jar https://github.com/gradle/gradle/raw/v7.6.0/gradle/wrapper/gradle-wrapper.jar
-
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
 
+    # Force the project to use Gradle 7.6 by upgrading its wrapper
+    - name: Override Gradle Version to 7.6
+      run: ./gradlew wrapper --gradle-version 7.6
+
+    # Now build with the updated wrapper
     - name: Build with Gradle
       run: ./gradlew assembleDebug
 
