@@ -8,6 +8,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx2048m -XX:MaxMetaspaceSize=1g"
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -18,13 +20,11 @@ jobs:
         distribution: 'temurin'
         java-version: '17'
 
-    # This installs Gradle globally, ignoring your broken gradlew script
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@v4
       with:
         gradle-version: '8.4'
 
-    # Notice this says "gradle" not "./gradlew"
     - name: Build with Gradle
       run: gradle assembleDebug
 
