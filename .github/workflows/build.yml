@@ -20,14 +20,18 @@ jobs:
         distribution: 'temurin'
         java-version: '11'
 
+    # CRITICAL FIX: Download the missing jar file so gradlew can run
+    - name: Download missing gradle-wrapper.jar
+      run: curl -L -o gradle/wrapper/gradle-wrapper.jar https://raw.githubusercontent.com/gradle/gradle/v7.6.0/gradle/wrapper/gradle-wrapper.jar
+
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
 
-    # Force the project to use Gradle 7.6 by upgrading its wrapper
+    # Now that the jar is there, we can update the wrapper to 7.6
     - name: Override Gradle Version to 7.6
       run: ./gradlew wrapper --gradle-version 7.6
 
-    # Now build with the updated wrapper
+    # Finally, build the app
     - name: Build with Gradle
       run: ./gradlew assembleDebug
 
